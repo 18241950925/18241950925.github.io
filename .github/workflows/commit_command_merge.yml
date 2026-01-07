@@ -26,6 +26,9 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Merge note to main
+        env:
+          # 使用 PAT 作为 GitHub CLI 的认证（如果用到 gh 命令的话）
+          GH_TOKEN: ${{ secrets.MY_PAT }}
         run: |
           # 确保本地有 main 分支
           git checkout main
