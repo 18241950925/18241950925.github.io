@@ -3,7 +3,7 @@ name: Merge to Main on Commit Command
 on:
   push:
     branches:
-      - dev  # 替换为你开发的分支名称
+      - note  # 替换为你开发的分支名称
 
 jobs:
   merge-on-command:
