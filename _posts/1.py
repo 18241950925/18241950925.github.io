@@ -11,6 +11,9 @@ class Edge:
         self.cost = cost
         self.cap = cap
 
+def spfa():
+    pass
+
 def solve():
     N,p,m,f,n,s = map(int, input().split())
     require = []
@@ -32,6 +35,7 @@ def solve():
             edges[i].append(Edge(i-N+n,s,inf))
         if i-N+m<=N:
             edges[i].append(Edge(i-N+m,f,inf))
+    spfa()
         
 if __name__ == '__main__':
     solve()
