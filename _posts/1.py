@@ -24,6 +24,14 @@ def solve():
     for i in range(1,N+1):
         edges[S].append(Edge(i,p,inf))    
         edges[i].append(Edge(T,0,require[i-1]))
-
+    for i in range(N+1,2*N+1):
+        edges[S].append(Edge(i,0,require[i-N-1]))  
+        if i != 2*N:  
+            edges[i].append(Edge(i+1,0,inf))
+        if i-N+n<=N:
+            edges[i].append(Edge(i-N+n,s,inf))
+        if i-N+m<=N:
+            edges[i].append(Edge(i-N+m,f,inf))
+        
 if __name__ == '__main__':
     solve()
