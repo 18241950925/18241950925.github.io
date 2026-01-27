@@ -1,4 +1,5 @@
 import sys
+from collections import deque
 
 # 加速 IO
 input = sys.stdin.read
@@ -11,8 +12,53 @@ class Edge:
         self.cost = cost
         self.cap = cap
 
-def spfa():
-    pass
+def spfa(nodes, edges):
+    S = nodes[0]
+    T = nodes[-1]
+    n = len(nodes)/2-1
+
+    queue = deque([S])
+    in_queue = [False] * len(nodes)
+    dist = [inf] * len(nodes)
+    parent = [-1] * len(nodes)
+
+    dist[S] = 0
+    in_queue[S] = True
+
+    while queue:
+        u = queue.popleft()
+        in_queue[u] = False
+
+        for edge in edges[u]:
+            v = edge.to
+            if edge.cap > 0 and dist[u] + edge.cost < dist[v]:
+                dist[v] = dist[u] + edge.cost
+                if not in_queue[v]:
+                    queue.append(v)
+                    in_queue[v] = True
+                parent[v] = u
+    max_flow = 100000000
+    cur = T
+    while parent[cur] != -1:
+        prev = parent[cur]
+        for edge in edges[prev]:
+            if edge.to == cur:
+                max_flow = min(max_flow, edge.cap)
+        cur = prev
+    cur = T
+    while parent[cur] != -1:
+        prev = parent[cur]
+        for edge in edges[prev]:
+            if edge.to == cur:
+                edge.cap -= max_flow
+        for edge in edges[cur]:
+            if edge.to == prev:
+                edge.cap += max_flow
+        cur = prev
+    if dist[T] == inf:
+        return -1
+    return (dist[T] * max_flow)
+    
 
 def solve():
     N,p,m,f,n,s = map(int, input().split())
@@ -35,7 +81,14 @@ def solve():
             edges[i].append(Edge(i-N+n,s,inf))
         if i-N+m<=N:
             edges[i].append(Edge(i-N+m,f,inf))
-    spfa()
+    cur_cost = 0
+    res = 0
+    while True:
+        cur_cost = spfa(nodes, edges)
+        if cur_cost == -1:
+            break
+        res += cur_cost
+    print(res)
         
 if __name__ == '__main__':
     solve()
