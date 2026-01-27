@@ -3,51 +3,39 @@ import sys
 # 加速 IO
 input = sys.stdin.read
 
+inf = 10**9
+
+class Edge:
+    def __init__(self, to, cost, cap):
+        self.to = to
+        self.cost = cost
+        self.cap = cap
+
+def spfa():
+    pass
+
 def solve():
-    data = input().split()
-    if not data:
-        return
-    
-    n = int(data[0])
-    m = int(data[1])
-    
-    # 预处理 a，转为整数列表
-    a = []
-    idx = 2
-    for _ in range(n):
-        a.append(int(data[idx]))
-        idx += 1
-    
-    # dp 数组初始化，使用大数代替 1e15
-    INF = 10**15
-    dp = [0] * (n + 1)
-    
-    # dp[1] 单独处理或在循环中自然处理皆可，这里对应 C++ 的 dp[1] = a[0]
-    dp[1] = a[0]
-    
-    for i in range(2, n + 1):
-        cur = i
-        total = 0
-        current_max = a[i-1] 
-        min_temp = INF      
+    N,p,m,f,n,s = map(int, input().split())
+    require = []
+    for _ in range(N):
+        require.append(int(input()))
+    nodes = [x for x in range(2*N+2)]
+    edges = [[] for _ in range(2*N+2)]
+    # 建边
+    S = 0
+    T = 2*N+1
+    for i in range(1,N+1):
+        edges[S].append(Edge(i,p,inf))    
+        edges[i].append(Edge(T,0,require[i-1]))
+    for i in range(N+1,2*N+1):
+        edges[S].append(Edge(i,0,require[i-N-1]))  
+        if i != 2*N:  
+            edges[i].append(Edge(i+1,0,inf))
+        if i-N+n<=N:
+            edges[i].append(Edge(i-N+n,s,inf))
+        if i-N+m<=N:
+            edges[i].append(Edge(i-N+m,f,inf))
+    spfa()
         
-        while cur >= 1:
-            val = a[cur-1]
-            total += val
-            
-            if total > m:
-                break
-            if val > current_max:
-                current_max = val
-            cost = dp[cur-1] + current_max
-            if cost < min_temp:
-                min_temp = cost
-            
-            cur -= 1
-            
-        dp[i] = min_temp
-
-    print(dp[n])
-
 if __name__ == '__main__':
     solve()
